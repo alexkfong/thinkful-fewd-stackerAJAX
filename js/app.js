@@ -55,6 +55,18 @@ var showSearchResults = function(query, resultNum) {
 	return results;
 };
 
+var showInspiredResults = function(query, resultNum) {
+	
+	var results = "";
+	if( resultNum < 10 ) {
+		results = resultNum + ' responders for the tag <strong>' + query + '</strong>';
+	}
+	else {
+		results = 'Top 10 responders for the tag <strong>' + query + '</strong>';
+	}
+	return results;
+};
+
 // takes error string and turns it into displayable DOM element
 var showError = function(error){
 	var errorElem = $('.templates .error').clone();
@@ -81,9 +93,10 @@ var getUnanswered = function(tags) {
 		type: "GET",
 	})
 	.done(function(result){ //this waits for the ajax to return with a succesful promise object
+		
 		var searchResults = showSearchResults(request.tagged, result.items.length);
-
 		$('.search-results').html(searchResults);
+		
 		//$.each is a higher order function. It takes an array and a function as an argument.
 		//The function is executed once for each item in the array.
 		$.each(result.items, function(i, item) {
@@ -112,7 +125,10 @@ var getInspired = function(tag) {
 		type: "GET"
 	})
 	.done(function(result){
-		console.log(result);
+		var searchResults = showInspiredResults(tag, result.items.length);
+
+		$('.search-results').html(searchResults);
+
 		$.each(result.items, function(i, item) {
 			var answerer = showAnswerer(item);
 			$('.results').append(answerer);
