@@ -120,7 +120,7 @@ $(document).ready( function() {
 		// zero out results if previous search has run
 		$('.results').html('');
 		// get the value of the tag the user submitted
-		var tag = $(this).find("input[name='tag']").val();
+		var tag = $(this).find("input[name='answerers']").val();
 		getInspired(tag);
 	});
 });
