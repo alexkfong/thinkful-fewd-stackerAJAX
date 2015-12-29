@@ -81,6 +81,29 @@ var getUnanswered = function(tags) {
 	});
 };
 
+// takes a string for a single tag, and returns the top answerers
+var getInspired = function(tag) {
+
+	var request = {
+		site: 'stackoverflow',
+		pagesize: 10
+	};
+
+	$.ajax({
+		url: "http://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time".
+		data: request,
+		dataType: "jsonp",
+		type: "GET"
+	})
+	.done(function(result){
+		console.log(result);
+	})
+	.fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
+		var errorElem = showError(error);
+		$('.search-results').append(errorElem);
+	});
+};
+
 
 $(document).ready( function() {
 	$('.unanswered-getter').submit( function(e){
@@ -91,7 +114,13 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+
 	$('.inspiration-getter').submit( function(e){
 		e.preventDefault();
+		// zero out results if previous search has run
+		$('.results').html('');
+		// get the value of the tag the user submitted
+		var tag = $(this).find("input[name='tag']").val();
+		getInspired(tag);
 	});
 });
