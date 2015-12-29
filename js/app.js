@@ -31,6 +31,22 @@ var showQuestion = function(question) {
 	return result;
 };
 
+var showAnswerer = function(answerer) {
+
+	var result = $('.templates .inspired').clone();
+
+	var userElem = result.find('.inspired-user a');
+	userElem.attr('href', answerer.user.link);
+	userElem.text(answerer.user.display_name);
+
+	var score = result.find('.score');
+	score.text(answerer.score + " points from " + answerer.post_count + " posts." );
+
+	var reputation = result.find('.reputation');
+	reputation.text(answerer.user.reputation);
+
+	return result;
+}
 
 // this function takes the results object from StackOverflow
 // and returns the number of results and tags to be appended to DOM
@@ -97,6 +113,10 @@ var getInspired = function(tag) {
 	})
 	.done(function(result){
 		console.log(result);
+		$.each(result.items, function(i, item) {
+			var answerer = showAnswerer(item);
+			$('.results').append(answerer);
+		});
 	})
 	.fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
 		var errorElem = showError(error);
